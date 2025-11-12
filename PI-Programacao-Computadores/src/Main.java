@@ -13,7 +13,18 @@ public class Main {
     private static ArrayList<String[]> listaEmprestimos = new ArrayList<>();
 
     public static void main(String[] args) {
+        completarDados();
         menu();
+    }
+
+    private static void completarDados() {
+        listaPessoas.addAll(List.of(
+                new Pessoa("nome1", "email1"),
+                new Pessoa("nome2", "email2"),
+                new Pessoa("nome3", "email3"),
+                new Pessoa("nome4", "email4"),
+                new Pessoa("nome5", "email5")
+        ));
     }
 
     private static String validarTexto(String texto) {
@@ -122,7 +133,7 @@ public class Main {
                 case 1: {
                     System.out.println("Cadastro:");
                     String nome = capitalizar(Entrada.leiaString("Nome -> "));
-                    String email = capitalizar(Entrada.leiaString("E-mail -> "));
+                    String email = validarTexto(Entrada.leiaString("E-mail -> "));
 
                     listaPessoas.add(new Pessoa(nome, email));
 
@@ -131,11 +142,28 @@ public class Main {
                 }
                 case 2: {
                     System.out.println("Lista de pessoas cadastradas:");
-                    System.out.println("Código | Nome | E-mail");
-                    for (Pessoa pessoa : listaPessoas) {
-                        System.out.println(pessoa);
-                    }
+                    listarPessoas();
                     System.out.println("----------------------\n");
+                    break;
+                }
+                case 3: {
+                    listarPessoas();
+                    int idPessoa = Entrada.leiaInt("Código da pessoa que deseja alterar -> ");
+                    Pessoa pessoa = listaPessoas.get(idPessoa - 1);
+
+                    String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
+                    String email = validarTexto(Entrada.leiaString("Novo e-mail -> "));
+
+                    pessoa.setNome(nome);
+                    pessoa.setEmail(email);
+                    System.out.println("=> Cadastro alterado com sucesso! <= \n");
+                    break;
+                }
+                case 4: {
+                    listarPessoas();
+                    int idPessoa = Entrada.leiaInt("Código da pessoa que deseja excluir -> ");
+                    listaPessoas.get(idPessoa - 1).excluir();
+                    System.out.println("=> Cadastro excluído com sucesso! <= \n");
                     break;
                 }
                 case 0: {
@@ -148,6 +176,14 @@ public class Main {
             }
         } while (opcao != 0);
     }
+
+    private static void listarPessoas() {
+        System.out.println("Código | Nome | E-mail");
+        for (Pessoa pessoa : listaPessoas) {
+            System.out.print(pessoa);
+        }
+    }
+
 
     //  submenu categorias
     private static void categorias() {
