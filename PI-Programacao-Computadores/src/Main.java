@@ -30,15 +30,17 @@ public class Main {
 
     private static void menu() {
         int opcao;
-        do {
-            System.out.println("=========================================");
-            System.out.println("|  1 - Sistema de Pessoas               |");
-            System.out.println("|  2 - Sistema de Categorias de Objetos |");
-            System.out.println("|  3 - Sistema de Objetos               |");
-            System.out.println("|  4 - Sistema de Manutenções           |");
-            System.out.println("|  5 - Sistema de Empréstimos           |");
-            System.out.println("|  0 - Sair                             |");
-            System.out.println("=========================================\n");
+        while (true) {
+            System.out.println("""
+                    ========================================
+                    | 1 - Sistema de Pessoas               |
+                    | 2 - Sistema de Categorias de Objetos |
+                    | 3 - Sistema de Objetos               |
+                    | 4 - Sistema de Manutenções           |
+                    | 5 - Sistema de Empréstimos           |
+                    | 0 - Sair                             |
+                    ========================================
+                    """);
 
             opcao = Entrada.leiaInt("Opção -> ");
             System.out.println();
@@ -96,28 +98,33 @@ public class Main {
                     System.out.println("Finalizando o sistema...");
                     System.exit(0);
                 }
-                default:
+                default: {
                     System.out.println("Opção Inválida!");
+                    break;
+                }
             }
-        } while (opcao != 0);
+        }
     }
 
     //  submenu clientes
     private static void clientes() {
         int opcao;
         do {
-            System.out.println("Menu do sistema de Pessoas");
-            System.out.println();
-            System.out.println(" 1 - Cadastrar nova pessoa");
-            System.out.println(" 0 - Voltar");
-            System.out.println();
+            System.out.println("""
+                    Menu do sistema de Pessoas:
+                    1 - Cadastrar nova pessoa
+                    2 - Listar pessoas
+                    3 - Alterar uma pessoa
+                    4 - Excluir uma pessoa
+                    0 - Voltar
+                    """);
 
             opcao = Entrada.leiaInt("Operação -> ");
             System.out.println();
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("\nCadastro");
+                    System.out.println("Cadastro");
                     String nome = capitalizar(Entrada.leiaString("Nome -> "));
                     String email = capitalizar(Entrada.leiaString("E-mail -> "));
 
@@ -128,9 +135,12 @@ public class Main {
                     break;
                 }
                 case 0: {
+                    break;
                 }
-                default:
+                default: {
                     System.out.println("Opção Inválida!");
+                    break;
+                }
             }
         } while (opcao != 0);
     }
@@ -139,19 +149,21 @@ public class Main {
     private static void categorias() {
         int opcao;
         do {
-            System.out.println("Menu do sistema de Categorias de Objetos");
-            System.out.println();
-            System.out.println(" 1 - Cadastrar nova categoria");
-            System.out.println(" 0 - Voltar");
-            System.out.println();
+            System.out.println("""
+                    Menu do sistema de Categorias de Objetos:
+                    1 - Cadastrar nova categoria
+                    2 - Listar categorias
+                    3 - Alterar uma categoria
+                    4 - Excluir uma categoria
+                    0 - Voltar
+                    """);
 
             opcao = Entrada.leiaInt("Operação -> ");
             System.out.println();
 
             switch (opcao) {
                 case 1: {
-
-                    System.out.println("\nCadastro");
+                    System.out.println("Cadastro");
                     String nome = capitalizar(Entrada.leiaString("Nome -> "));
                     String descricao = capitalizar(Entrada.leiaString("Descrição -> "));
 
@@ -162,9 +174,12 @@ public class Main {
                     break;
                 }
                 case 0: {
+                    break;
                 }
-                default:
+                default: {
                     System.out.println("Opção Inválida!");
+                    break;
+                }
             }
         } while (opcao != 0);
     }
@@ -172,18 +187,21 @@ public class Main {
     private static void objetos() {
         int opcao;
         do {
-            System.out.println("Menu do sistema de Objetos");
-            System.out.println();
-            System.out.println(" 1 - Cadastrar novo objeto");
-            System.out.println(" 0 - Voltar");
-            System.out.println();
+            System.out.println("""
+                    Menu do sistema de Objetos:
+                    1 - Cadastrar novo objeto
+                    2 - Listar objetos
+                    3 - Alterar um objeto
+                    4 - Excluir um objeto
+                    0 - Voltar
+                    """);
 
             opcao = Entrada.leiaInt("Operação -> ");
             System.out.println();
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("\nCadastro");
+                    System.out.println("Cadastro");
                     String nome = capitalizar(Entrada.leiaString("Nome do objeto -> "));
                     String situacao = capitalizar(Entrada.leiaString("Situação do objeto -> "));
                     String dono = capitalizar(Entrada.leiaString("Nome do dono -> "));
@@ -199,9 +217,12 @@ public class Main {
                     break;
                 }
                 case 0: {
+                    break;
                 }
-                default:
+                default: {
                     System.out.println("Opção Inválida!");
+                    break;
+                }
             }
         } while (opcao != 0);
     }
@@ -209,18 +230,21 @@ public class Main {
     private static void manutencoes() {
         int opcao;
         do {
-            System.out.println("Menu do sistema de Manutenções");
-            System.out.println();
-            System.out.println(" 1 - Cadastrar nova manutenção");
-            System.out.println(" 0 - Voltar");
-            System.out.println();
+            System.out.println("""
+                    Menu do sistema de Manutenções:
+                    1 - Cadastrar nova manutenção
+                    2 - Listar manutenções
+                    3 - Alterar uma manutenção
+                    4 - Excluir uma manutenção
+                    0 - Voltar
+                    """);
 
             opcao = Entrada.leiaInt("Operação -> ");
             System.out.println();
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("\nCadastro");
+                    System.out.println("Cadastro");
                     String idObjeto = Entrada.leiaString("ID do objeto -> ");
                     String nomeResponsavelManut = Entrada.leiaString("Nome do responsável pela manutenção -> ");
                     String dataEntrada = validarTexto(Entrada.leiaString("Data de entrada na manutenção -> "));
@@ -233,9 +257,12 @@ public class Main {
                     break;
                 }
                 case 0: {
+                    break;
                 }
-                default:
+                default: {
                     System.out.println("Opção Inválida!");
+                    break;
+                }
             }
         } while (opcao != 0);
     }
@@ -243,18 +270,21 @@ public class Main {
     private static void emprestimos() {
         int opcao;
         do {
-            System.out.println("Menu do sistema de Empréstimos");
-            System.out.println();
-            System.out.println(" 1 - Cadastrar novo empréstimo");
-            System.out.println(" 0 - Voltar");
-            System.out.println();
+            System.out.println("""
+                    Menu do sistema de Empréstimos:
+                    1 - Cadastrar novo empréstimo
+                    2 - Listar empréstimos
+                    3 - Alterar um empréstimo
+                    4 - Excluir um empréstimo
+                    0 - Voltar
+                    """);
 
             opcao = Entrada.leiaInt("Operação -> ");
             System.out.println();
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("\nCadastro");
+                    System.out.println("Cadastro");
                     String idObjeto = Entrada.leiaString("ID do objeto -> ");
                     String nomeTomador = capitalizar(Entrada.leiaString("Nome do tomador -> "));
                     String dataEntrada = validarTexto(Entrada.leiaString("Data do empréstimo -> "));
@@ -270,9 +300,12 @@ public class Main {
                     break;
                 }
                 case 0: {
+                    break;
                 }
-                default:
+                default: {
                     System.out.println("Opção Inválida!");
+                    break;
+                }
             }
         } while (opcao != 0);
     }
