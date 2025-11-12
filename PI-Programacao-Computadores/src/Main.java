@@ -1,10 +1,12 @@
+import entidades.Pessoa;
 import util.Entrada;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
-    private static ArrayList<String[]> listaFuncionarios = new ArrayList<>();
+    private static ArrayList<Pessoa> listaPessoas = new ArrayList<>();
     private static ArrayList<String[]> categoriasObjetos = new ArrayList<>();
     private static ArrayList<String[]> listaObjetos = new ArrayList<>();
     private static ArrayList<String[]> listaManutencao = new ArrayList<>();
@@ -66,13 +68,6 @@ public class Main {
                     break;
                 }
                 case 0: {
-                    System.out.println("\n\n");
-
-                    System.out.println("Lista de funcionários:");
-                    for (String[] item : listaFuncionarios) {
-                        System.out.println(Arrays.toString(item));
-                    }
-
                     System.out.println("\nLista de categorias:");
                     for (String[] item : categoriasObjetos) {
                         System.out.println(Arrays.toString(item));
@@ -97,6 +92,7 @@ public class Main {
 
                     System.out.println("Finalizando o sistema...");
                     System.exit(0);
+                    break;
                 }
                 default: {
                     System.out.println("Opção Inválida!");
@@ -124,14 +120,22 @@ public class Main {
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("Cadastro");
+                    System.out.println("Cadastro:");
                     String nome = capitalizar(Entrada.leiaString("Nome -> "));
                     String email = capitalizar(Entrada.leiaString("E-mail -> "));
 
-                    String[] pessoa = {nome, email};
-                    listaFuncionarios.add(pessoa);
+                    listaPessoas.add(new Pessoa(nome, email));
 
                     System.out.println("=> Pessoa cadastrada com sucesso! <= \n");
+                    break;
+                }
+                case 2: {
+                    System.out.println("Lista de pessoas cadastradas:");
+                    System.out.println("Código | Nome | E-mail");
+                    for (Pessoa pessoa : listaPessoas) {
+                        System.out.println(pessoa);
+                    }
+                    System.out.println("----------------------\n");
                     break;
                 }
                 case 0: {
