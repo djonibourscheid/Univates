@@ -1,15 +1,15 @@
 import entidades.Categoria;
+import entidades.Objeto;
 import entidades.Pessoa;
 import util.Entrada;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Main {
     private static ArrayList<Pessoa> listaPessoas = new ArrayList<>();
     private static ArrayList<Categoria> listaCategorias = new ArrayList<>();
-    private static ArrayList<String[]> listaObjetos = new ArrayList<>();
+    private static ArrayList<Objeto> listaObjetos = new ArrayList<>();
     private static ArrayList<String[]> listaManutencao = new ArrayList<>();
     private static ArrayList<String[]> listaEmprestimos = new ArrayList<>();
 
@@ -33,6 +33,14 @@ public class Main {
                 new Categoria("categoria3", "descricao3"),
                 new Categoria("categoria4", "descricao4"),
                 new Categoria("categoria5", "descricao5")
+        ));
+
+        listaObjetos.addAll(List.of(
+                new Objeto("objeto1", "ativo", listaPessoas.get(2), listaCategorias.get(3)),
+                new Objeto("objeto2", "baixado", listaPessoas.get(1), listaCategorias.get(1)),
+                new Objeto("objeto3", "ativo", listaPessoas.get(3), listaCategorias.get(2)),
+                new Objeto("objeto4", "baixado", listaPessoas.get(2), listaCategorias.get(0)),
+                new Objeto("objeto5", "ativo", listaPessoas.get(0), listaCategorias.get(4))
         ));
     }
 
@@ -88,23 +96,6 @@ public class Main {
                     break;
                 }
                 case 0: {
-                    System.out.println("\nLista de objetos:");
-                    for (String[] item : listaObjetos) {
-                        System.out.println(Arrays.toString(item));
-                    }
-
-                    System.out.println("\nLista de manutenções:");
-                    for (String[] item : listaManutencao) {
-                        System.out.println(Arrays.toString(item));
-                    }
-
-                    System.out.println("\nLista de empréstimos:");
-                    for (String[] item : listaEmprestimos) {
-                        System.out.println(Arrays.toString(item));
-                    }
-                    System.out.println();
-
-
                     System.out.println("Finalizando o sistema...");
                     System.exit(0);
                     break;
@@ -153,6 +144,7 @@ public class Main {
                     listarPessoas();
                     int idPessoa = Entrada.leiaInt("Código da pessoa que deseja alterar -> ");
                     Pessoa pessoa = listaPessoas.get(idPessoa - 1);
+                    // TODO: validar se o idPessoa está visível
 
                     String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
                     String email = validarTexto(Entrada.leiaString("Novo e-mail -> "));
@@ -224,6 +216,7 @@ public class Main {
                     listarCategorias();
                     int idCategoria = Entrada.leiaInt("Código da categoria que deseja alterar -> ");
                     Categoria categoria = listaCategorias.get(idCategoria - 1);
+                    // TODO: validar se o idCategoria está visível
 
                     String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
                     String descricao = capitalizar(Entrada.leiaString("Nova descrição -> "));
@@ -259,6 +252,7 @@ public class Main {
     }
 
 
+    //  submenu objetos
     private static void objetos() {
         int opcao;
         do {
@@ -276,19 +270,66 @@ public class Main {
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("Cadastro");
+                    System.out.println("Cadastro:");
                     String nome = capitalizar(Entrada.leiaString("Nome do objeto -> "));
-                    String situacao = capitalizar(Entrada.leiaString("Situação do objeto -> "));
-                    String dono = capitalizar(Entrada.leiaString("Nome do dono -> "));
-                    String categoria = capitalizar(Entrada.leiaString("Categoria do objeto -> "));
+                    String situacao = capitalizar(Entrada.leiaString("Situação do objeto (Ativo ou Baixado) -> "));
 
-                    // TO DO: Será listado as pessoas e categorias disponiveis no sistema e uma validação se
-                    // realmente é válido as entradas
+                    // TODO: Este trecho de codigo está repetido no case 3
+                    System.out.println("\nLista de pessoas cadastradas: ");
+                    listarPessoas();
+                    int idDono = Entrada.leiaInt("Código do dono -> ");
+                    Pessoa dono = listaPessoas.get(idDono - 1);
 
-                    String[] objeto = {nome, situacao, dono, categoria};
-                    listaObjetos.add(objeto);
+                    System.out.println("\nLista de categorias cadastradas:");
+                    listarCategorias();
+                    int idCategoria = Entrada.leiaInt("Código da categoria do objeto -> ");
+                    Categoria categoria = listaCategorias.get(idCategoria - 1);
 
+                    // TODO: validação se realmente é válido as entradas em vez de dar erro
+
+                    listaObjetos.add(new Objeto(nome, situacao, dono, categoria));
                     System.out.println("=> Objeto cadastrado com sucesso! <= \n");
+                    break;
+                }
+                case 2: {
+                    System.out.println("Lista de objetos cadastrados:");
+                    listarObjetos();
+                    System.out.println("----------------------\n");
+                    break;
+                }
+                case 3: {
+                    listarObjetos();
+                    int idObjeto = Entrada.leiaInt("Código do objeto que deseja alterar -> ");
+                    Objeto objeto = listaObjetos.get(idObjeto - 1);
+                    // TODO: validar se o idObjeto está visível
+
+                    String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
+                    String sitaucao = capitalizar(Entrada.leiaString("Nova situação (Ativo ou Baixado) -> "));
+
+                    System.out.println("\nLista de pessoas cadastradas: ");
+                    listarPessoas();
+                    int idDono = Entrada.leiaInt("Código do novo dono -> ");
+                    Pessoa dono = listaPessoas.get(idDono - 1);
+
+                    System.out.println("\nLista de categorias cadastradas:");
+                    listarCategorias();
+                    int idCategoria = Entrada.leiaInt("Código da nova categoria do objeto -> ");
+                    Categoria categoria = listaCategorias.get(idCategoria - 1);
+
+                    // TODO: validação se realmente é válido as entradas em vez de dar erro
+
+                    objeto.setNome(nome);
+                    objeto.setSituacao(sitaucao);
+                    objeto.setDono(dono);
+                    objeto.setCategoria(categoria);
+                    System.out.println("=> Cadastro alterado com sucesso! <= \n");
+                    break;
+                }
+                case 4: {
+                    listarObjetos();
+                    int idObjeto = Entrada.leiaInt("Código do objeto que deseja excluir -> ");
+                    listaObjetos.get(idObjeto - 1).excluir();
+                    System.out.println("=> Cadastro excluído com sucesso! <= \n");
                     break;
                 }
                 case 0: {
@@ -300,6 +341,13 @@ public class Main {
                 }
             }
         } while (opcao != 0);
+    }
+
+    private static void listarObjetos() {
+        System.out.println("Código | Nome | Situação | Nome dono | Nome categoria");
+        for (Objeto objeto : listaObjetos) {
+            System.out.print(objeto);
+        }
     }
 
     private static void manutencoes() {
