@@ -2,13 +2,12 @@ package entidades;
 
 public class Pessoa {
     private static int qtdContas = 0;
-    private final int ID;
+    private final int ID = ++qtdContas;
     private String nome;
     private String email;
-    private boolean ativo = true;
+    private boolean visivel = true;
 
     public Pessoa(String nome, String email) {
-        this.ID = ++qtdContas;
         this.nome = nome;
         this.email = email;
     }
@@ -22,12 +21,12 @@ public class Pessoa {
     }
 
     public void excluir() {
-        this.ativo = false;
+        this.visivel = false;
     }
 
     @Override
     public String toString() {
-        if (ativo) return "%3d | %s | %s%n".formatted(ID, nome, email);
+        if (visivel) return "%3d | %s | %s%n".formatted(ID, nome, email);
         return "";
     }
 }

@@ -1,3 +1,4 @@
+import entidades.Categoria;
 import entidades.Pessoa;
 import util.Entrada;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public class Main {
     private static ArrayList<Pessoa> listaPessoas = new ArrayList<>();
-    private static ArrayList<String[]> categoriasObjetos = new ArrayList<>();
+    private static ArrayList<Categoria> listaCategorias = new ArrayList<>();
     private static ArrayList<String[]> listaObjetos = new ArrayList<>();
     private static ArrayList<String[]> listaManutencao = new ArrayList<>();
     private static ArrayList<String[]> listaEmprestimos = new ArrayList<>();
@@ -24,6 +25,14 @@ public class Main {
                 new Pessoa("nome3", "email3"),
                 new Pessoa("nome4", "email4"),
                 new Pessoa("nome5", "email5")
+        ));
+
+        listaCategorias.addAll(List.of(
+                new Categoria("categoria1", "descricao1"),
+                new Categoria("categoria2", "descricao2"),
+                new Categoria("categoria3", "descricao3"),
+                new Categoria("categoria4", "descricao4"),
+                new Categoria("categoria5", "descricao5")
         ));
     }
 
@@ -59,7 +68,7 @@ public class Main {
             System.out.println();
             switch (opcao) {
                 case 1: {
-                    clientes();
+                    pessoas();
                     break;
                 }
                 case 2: {
@@ -79,11 +88,6 @@ public class Main {
                     break;
                 }
                 case 0: {
-                    System.out.println("\nLista de categorias:");
-                    for (String[] item : categoriasObjetos) {
-                        System.out.println(Arrays.toString(item));
-                    }
-
                     System.out.println("\nLista de objetos:");
                     for (String[] item : listaObjetos) {
                         System.out.println(Arrays.toString(item));
@@ -113,8 +117,8 @@ public class Main {
         }
     }
 
-    //  submenu clientes
-    private static void clientes() {
+    //  submenu pessoas
+    private static void pessoas() {
         int opcao;
         do {
             System.out.println("""
@@ -136,7 +140,6 @@ public class Main {
                     String email = validarTexto(Entrada.leiaString("E-mail -> "));
 
                     listaPessoas.add(new Pessoa(nome, email));
-
                     System.out.println("=> Pessoa cadastrada com sucesso! <= \n");
                     break;
                 }
@@ -203,14 +206,38 @@ public class Main {
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("Cadastro");
+                    System.out.println("Cadastro:");
                     String nome = capitalizar(Entrada.leiaString("Nome -> "));
                     String descricao = capitalizar(Entrada.leiaString("Descrição -> "));
 
-                    String[] categoria = {nome, descricao};
-                    categoriasObjetos.add(categoria);
+                    listaCategorias.add(new Categoria(nome, descricao));
+                    System.out.println("=> Categoria cadastrada com sucesso! <= \n");
+                    break;
+                }
+                case 2: {
+                    System.out.println("Lista de categorias cadastradas:");
+                    listarCategorias();
+                    System.out.println("----------------------\n");
+                    break;
+                }
+                case 3: {
+                    listarCategorias();
+                    int idCategoria = Entrada.leiaInt("Código da categoria que deseja alterar -> ");
+                    Categoria categoria = listaCategorias.get(idCategoria - 1);
 
-                    System.out.println("=> Tipo cadastrado com sucesso! <= \n");
+                    String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
+                    String descricao = capitalizar(Entrada.leiaString("Nova descrição -> "));
+
+                    categoria.setNome(nome);
+                    categoria.setDescricao(descricao);
+                    System.out.println("=> Cadastro alterado com sucesso! <= \n");
+                    break;
+                }
+                case 4: {
+                    listarCategorias();
+                    int idCategoria = Entrada.leiaInt("Código da categoria que deseja excluir -> ");
+                    listaCategorias.get(idCategoria - 1).excluir();
+                    System.out.println("=> Cadastro excluído com sucesso! <= \n");
                     break;
                 }
                 case 0: {
@@ -223,6 +250,14 @@ public class Main {
             }
         } while (opcao != 0);
     }
+
+    private static void listarCategorias() {
+        System.out.println("Código | Nome | Descrição");
+        for (Categoria categoria : listaCategorias) {
+            System.out.print(categoria);
+        }
+    }
+
 
     private static void objetos() {
         int opcao;
