@@ -1,16 +1,20 @@
 import entidades.Categoria;
+import entidades.Manutencao;
 import entidades.Objeto;
 import entidades.Pessoa;
 import util.Entrada;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     private static ArrayList<Pessoa> listaPessoas = new ArrayList<>();
     private static ArrayList<Categoria> listaCategorias = new ArrayList<>();
     private static ArrayList<Objeto> listaObjetos = new ArrayList<>();
-    private static ArrayList<String[]> listaManutencao = new ArrayList<>();
+    private static ArrayList<Manutencao> listaManutencoes = new ArrayList<>();
     private static ArrayList<String[]> listaEmprestimos = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -350,6 +354,8 @@ public class Main {
         }
     }
 
+
+    //  submenu manutencoes
     private static void manutencoes() {
         int opcao;
         do {
@@ -367,16 +373,69 @@ public class Main {
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("Cadastro");
-                    String idObjeto = Entrada.leiaString("ID do objeto -> ");
-                    String nomeResponsavelManut = Entrada.leiaString("Nome do responsável pela manutenção -> ");
-                    String dataEntrada = validarTexto(Entrada.leiaString("Data de entrada na manutenção -> "));
-                    String dataSaida = validarTexto(Entrada.leiaString("Data de saída da manutenção -> "));
+                    System.out.println("Cadastro:");
 
-                    String[] objeto = {idObjeto, nomeResponsavelManut, dataEntrada, dataSaida};
-                    listaManutencao.add(objeto);
+                    // TODO: codigo repetido no case 3
+                    listarObjetos();
+                    int idObjeto = Entrada.leiaInt("ID do objeto -> ");
+                    Objeto objeto = listaObjetos.get(idObjeto - 1);
 
-                    System.out.println("=> Manutenção cadastrada com sucesso! <= \n");
+                    String responsavelManut = capitalizar(Entrada.leiaString("Nome do responsável pela manutenção -> "));
+
+                    DateTimeFormatter dataFormato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                    String entradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
+                    String saidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
+
+                    try {
+                        LocalDate dataEntrada = LocalDate.parse(entradaStr, dataFormato);
+                        LocalDate dataSaida = LocalDate.parse(saidaStr, dataFormato);
+                        listaManutencoes.add(new Manutencao(objeto, responsavelManut, dataEntrada, dataSaida));
+                        System.out.println("=> Manutenção cadastrada com sucesso! <=\n");
+                    } catch (Exception e) {
+                        System.out.println("=> Data inválida! Use o formato DD/MM/AAAA. <=\n");
+                    }
+                    break;
+                }
+                case 2: {
+                    System.out.println("Lista de manutenções cadastradas:");
+                    listarManutencoes();
+                    System.out.println("----------------------\n");
+                    break;
+                }
+                case 3: {
+                    listarManutencoes();
+                    int idManut = Entrada.leiaInt("Código da manutenção que deseja alterar -> ");
+                    Manutencao manutencao = listaManutencoes.get(idManut - 1);
+                    // TODO: validar se o idManut está visível
+
+                    String responsavelManut = capitalizar(Entrada.leiaString("Nome do novo responsável pela " +
+                            "manutenção -> "));
+
+                    DateTimeFormatter dataFormato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                    String entradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
+                    String saidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
+
+                    try {
+                        LocalDate dataEntrada = LocalDate.parse(entradaStr, dataFormato);
+                        LocalDate dataSaida = LocalDate.parse(saidaStr, dataFormato);
+
+                        manutencao.setNomeResponsavelManut(responsavelManut);
+                        manutencao.setDataEntrada(dataEntrada);
+                        manutencao.setDataSaida(dataSaida);
+                        System.out.println("=> Cadastro alterado com sucesso! <=\n");
+                    } catch (Exception e) {
+                        System.out.println("=> Data inválida! Use o formato DD/MM/AAAA. <=\n");
+                    }
+                    break;
+                }
+                case 4: {
+                    listarManutencoes();
+                    int idManut = Entrada.leiaInt("Código da manutenção que deseja excluir -> ");
+                    char manutConcluido = Entrada.leiaChar("Manutenção concluída? (S/N) ->");
+                    listaManutencoes.get(idManut - 1).excluir(manutConcluido);
+                    System.out.println("=> Cadastro excluído com sucesso! <= \n");
                     break;
                 }
                 case 0: {
@@ -389,6 +448,14 @@ public class Main {
             }
         } while (opcao != 0);
     }
+
+    private static void listarManutencoes() {
+        System.out.println("Código | Nome objeto | Responsável pela manut. | Data entrada | Data saída");
+        for (Manutencao manutencao : listaManutencoes) {
+            System.out.print(manutencao);
+        }
+    }
+
 
     private static void emprestimos() {
         int opcao;
