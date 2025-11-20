@@ -16,6 +16,7 @@ public class Main {
     private static ArrayList<Objeto> listaObjetos = new ArrayList<>();
     private static ArrayList<Manutencao> listaManutencoes = new ArrayList<>();
     private static ArrayList<String[]> listaEmprestimos = new ArrayList<>();
+    private static final DateTimeFormatter DATA_FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static void main(String[] args) {
         completarDados();
@@ -39,12 +40,22 @@ public class Main {
                 new Categoria("categoria5", "descricao5")
         ));
 
+        Objeto objeto1 = new Objeto("objeto1", "ativo", listaPessoas.get(2), listaCategorias.get(3));
+        Objeto objeto2 = new Objeto("objeto2", "baixado", listaPessoas.get(1), listaCategorias.get(1));
+
         listaObjetos.addAll(List.of(
-                new Objeto("objeto1", "ativo", listaPessoas.get(2), listaCategorias.get(3)),
-                new Objeto("objeto2", "baixado", listaPessoas.get(1), listaCategorias.get(1)),
+                objeto1, objeto2,
                 new Objeto("objeto3", "ativo", listaPessoas.get(3), listaCategorias.get(2)),
                 new Objeto("objeto4", "baixado", listaPessoas.get(2), listaCategorias.get(0)),
                 new Objeto("objeto5", "ativo", listaPessoas.get(0), listaCategorias.get(4))
+        ));
+
+
+        listaManutencoes.addAll(List.of(
+                new Manutencao(objeto1, "José", LocalDate.parse("01/01/2001", DATA_FORMATO), LocalDate.parse("02/01/2001",
+                        DATA_FORMATO)),
+                new Manutencao(objeto2, "Marcos", LocalDate.parse("05/12/2012", DATA_FORMATO), LocalDate.parse("20/12/2012",
+                        DATA_FORMATO))
         ));
     }
 
@@ -375,21 +386,18 @@ public class Main {
                 case 1: {
                     System.out.println("Cadastro:");
 
-                    // TODO: codigo repetido no case 3
                     listarObjetos();
                     int idObjeto = Entrada.leiaInt("ID do objeto -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
 
+                    // TODO: codigo repetido no case 3
                     String responsavelManut = capitalizar(Entrada.leiaString("Nome do responsável pela manutenção -> "));
-
-                    DateTimeFormatter dataFormato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
                     String entradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
                     String saidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
 
                     try {
-                        LocalDate dataEntrada = LocalDate.parse(entradaStr, dataFormato);
-                        LocalDate dataSaida = LocalDate.parse(saidaStr, dataFormato);
+                        LocalDate dataEntrada = LocalDate.parse(entradaStr, DATA_FORMATO);
+                        LocalDate dataSaida = LocalDate.parse(saidaStr, DATA_FORMATO);
                         listaManutencoes.add(new Manutencao(objeto, responsavelManut, dataEntrada, dataSaida));
                         System.out.println("=> Manutenção cadastrada com sucesso! <=\n");
                     } catch (Exception e) {
@@ -411,15 +419,12 @@ public class Main {
 
                     String responsavelManut = capitalizar(Entrada.leiaString("Nome do novo responsável pela " +
                             "manutenção -> "));
-
-                    DateTimeFormatter dataFormato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
                     String entradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
                     String saidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
 
                     try {
-                        LocalDate dataEntrada = LocalDate.parse(entradaStr, dataFormato);
-                        LocalDate dataSaida = LocalDate.parse(saidaStr, dataFormato);
+                        LocalDate dataEntrada = LocalDate.parse(entradaStr, DATA_FORMATO);
+                        LocalDate dataSaida = LocalDate.parse(saidaStr, DATA_FORMATO);
 
                         manutencao.setNomeResponsavelManut(responsavelManut);
                         manutencao.setDataEntrada(dataEntrada);
