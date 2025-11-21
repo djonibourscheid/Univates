@@ -1,7 +1,4 @@
-import entidades.Categoria;
-import entidades.Manutencao;
-import entidades.Objeto;
-import entidades.Pessoa;
+import entidades.*;
 import util.Entrada;
 
 import java.time.LocalDate;
@@ -15,7 +12,7 @@ public class Main {
     private static ArrayList<Categoria> listaCategorias = new ArrayList<>();
     private static ArrayList<Objeto> listaObjetos = new ArrayList<>();
     private static ArrayList<Manutencao> listaManutencoes = new ArrayList<>();
-    private static ArrayList<String[]> listaEmprestimos = new ArrayList<>();
+    private static ArrayList<Emprestimo> listaEmprestimos = new ArrayList<>();
     private static final DateTimeFormatter DATA_FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static void main(String[] args) {
@@ -392,12 +389,12 @@ public class Main {
 
                     // TODO: codigo repetido no case 3
                     String responsavelManut = capitalizar(Entrada.leiaString("Nome do responsável pela manutenção -> "));
-                    String entradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
-                    String saidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
+                    String dataEntradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
+                    String dataSaidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
 
                     try {
-                        LocalDate dataEntrada = LocalDate.parse(entradaStr, DATA_FORMATO);
-                        LocalDate dataSaida = LocalDate.parse(saidaStr, DATA_FORMATO);
+                        LocalDate dataEntrada = LocalDate.parse(dataEntradaStr, DATA_FORMATO);
+                        LocalDate dataSaida = LocalDate.parse(dataSaidaStr, DATA_FORMATO);
                         listaManutencoes.add(new Manutencao(objeto, responsavelManut, dataEntrada, dataSaida));
                         System.out.println("=> Manutenção cadastrada com sucesso! <=\n");
                     } catch (Exception e) {
@@ -417,14 +414,13 @@ public class Main {
                     Manutencao manutencao = listaManutencoes.get(idManut - 1);
                     // TODO: validar se o idManut está visível
 
-                    String responsavelManut = capitalizar(Entrada.leiaString("Nome do novo responsável pela " +
-                            "manutenção -> "));
-                    String entradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
-                    String saidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
+                    String responsavelManut = capitalizar(Entrada.leiaString("Nome do novo responsável pela manutenção -> "));
+                    String dataEntradaStr = validarTexto(Entrada.leiaString("Nova data de entrada na manutenção (DD/MM/AAAA) -> "));
+                    String dataSaidaStr = validarTexto(Entrada.leiaString("Nova data de saída da manutenção (DD/MM/AAAA) -> "));
 
                     try {
-                        LocalDate dataEntrada = LocalDate.parse(entradaStr, DATA_FORMATO);
-                        LocalDate dataSaida = LocalDate.parse(saidaStr, DATA_FORMATO);
+                        LocalDate dataEntrada = LocalDate.parse(dataEntradaStr, DATA_FORMATO);
+                        LocalDate dataSaida = LocalDate.parse(dataSaidaStr, DATA_FORMATO);
 
                         manutencao.setNomeResponsavelManut(responsavelManut);
                         manutencao.setDataEntrada(dataEntrada);
@@ -455,7 +451,7 @@ public class Main {
     }
 
     private static void listarManutencoes() {
-        System.out.println("Código | Nome objeto | Responsável pela manut. | Data entrada | Data saída");
+        System.out.println("Código | Nome objeto | Nome do dono | Responsável pela manut. | Data entrada | Data saída");
         for (Manutencao manutencao : listaManutencoes) {
             System.out.print(manutencao);
         }
@@ -479,19 +475,62 @@ public class Main {
 
             switch (opcao) {
                 case 1: {
-                    System.out.println("Cadastro");
-                    String idObjeto = Entrada.leiaString("ID do objeto -> ");
-                    String nomeTomador = capitalizar(Entrada.leiaString("Nome do tomador -> "));
-                    String dataEntrada = validarTexto(Entrada.leiaString("Data do empréstimo -> "));
-                    String dataSaida = validarTexto(Entrada.leiaString("Data da devolução -> "));
+                    System.out.println("Cadastro:");
 
-                    // TODO: Será listado as pessoas disponiveis no sistema e uma validação se
-                    // realmente é válido as entradas
+                    listarObjetos();
+                    int idObjeto = Entrada.leiaInt("ID do objeto -> ");
+                    Objeto objeto = listaObjetos.get(idObjeto - 1);
 
-                    String[] objeto = {idObjeto, nomeTomador, dataEntrada, dataSaida};
-                    listaEmprestimos.add(objeto);
+                    listarPessoas();
+                    int idTomador = Entrada.leiaInt("\nID do tomador -> ");
+                    Pessoa tomador = listaPessoas.get(idTomador - 1);
 
-                    System.out.println("=> Manutenção cadastrada com sucesso! <= \n");
+                    String dataEmprestimoStr = validarTexto(Entrada.leiaString("Data do empréstimo -> "));
+                    String dataDevolucaoStr = validarTexto(Entrada.leiaString("Data da devolução -> "));
+
+                    try {
+                        LocalDate dataEmprestimo = LocalDate.parse(dataEmprestimoStr, DATA_FORMATO);
+                        LocalDate dataDevolucao = LocalDate.parse(dataDevolucaoStr, DATA_FORMATO);
+
+                        listaEmprestimos.add(new Emprestimo(objeto, tomador, dataEmprestimo, dataDevolucao));
+                        System.out.println("=> Empréstimo cadastrado com sucesso! <=\n");
+                    } catch (Exception e) {
+                        System.out.println("=> Data inválida! Use o formato DD/MM/AAAA. <=\n");
+                    }
+                    break;
+                }
+                case 2: {
+                    System.out.println("Lista de empréstimos cadastrados:");
+                    listarEmprestimos();
+                    System.out.println("----------------------\n");
+                    break;
+                }
+                case 3: {
+                    listarEmprestimos();
+                    int idEmprestimo = Entrada.leiaInt("Código do empréstimo que deseja alterar -> ");
+                    Emprestimo emprestimo = listaEmprestimos.get(idEmprestimo - 1);
+                    // TODO: validar se o idEmprestimo está visível
+
+                    String dataEmprestimoStr = validarTexto(Entrada.leiaString("Nova data do empréstimo -> "));
+                    String dataDevolucaoStr = validarTexto(Entrada.leiaString("Nova data da devolução -> "));
+
+                    try {
+                        LocalDate dataEmprestimo = LocalDate.parse(dataEmprestimoStr, DATA_FORMATO);
+                        LocalDate dataDevolucao = LocalDate.parse(dataDevolucaoStr, DATA_FORMATO);
+
+                        emprestimo.setDataEmprestimo(dataEmprestimo);
+                        emprestimo.setDataDevolucao(dataDevolucao);
+                        System.out.println("=> Cadastro alterado com sucesso! <=\n");
+                    } catch (Exception e) {
+                        System.out.println("=> Data inválida! Use o formato DD/MM/AAAA. <=\n");
+                    }
+                    break;
+                }
+                case 4: {
+                    listarEmprestimos();
+                    int idEmprestimo = Entrada.leiaInt("Código da empréstimo que deseja excluir -> ");
+                    listaEmprestimos.get(idEmprestimo - 1).excluir();
+                    System.out.println("=> Cadastro excluído com sucesso! <= \n");
                     break;
                 }
                 case 0: {
@@ -503,5 +542,12 @@ public class Main {
                 }
             }
         } while (opcao != 0);
+    }
+
+    private static void listarEmprestimos() {
+        System.out.println("Código | Nome objeto | Nome do Dono | Nome do tomador | Data entrada | Data saída");
+        for (Emprestimo emprestimo : listaEmprestimos) {
+            System.out.print(emprestimo);
+        }
     }
 }

@@ -42,7 +42,7 @@ public class Manutencao {
     @Override
     public String toString() {
         if (visivel)
-            return "%3d | %s | %s | %s | %s%n".formatted(ID, objeto.getNome(), nomeResponsavelManut, dataEntrada, dataSaida);
+            return "%3d | %s | %s | %s | %s | %s%n".formatted(ID, objeto.getNome(), objeto.getDono().getNome(), nomeResponsavelManut, dataEntrada, dataSaida);
         return "";
     }
 

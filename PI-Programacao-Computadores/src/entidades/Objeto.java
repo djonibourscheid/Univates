@@ -28,6 +28,10 @@ public class Objeto {
         this.situacao = situacao;
     }
 
+    public Pessoa getDono() {
+        return dono;
+    }
+
     public void setDono(Pessoa dono) {
         this.dono = dono;
     }
