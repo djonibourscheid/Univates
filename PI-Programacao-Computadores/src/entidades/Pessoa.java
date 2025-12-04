@@ -17,11 +17,8 @@ public class Pessoa extends EntidadeVisivel {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void update(String nome, String email) {
         this.nome = nome;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
     }
 

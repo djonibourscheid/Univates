@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     private static ArrayList<Pessoa> listaPessoas = new ArrayList<>();
@@ -168,9 +167,7 @@ public class Main {
                     String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
                     String email = validarTexto(Entrada.leiaString("Novo e-mail -> "));
 
-                    // todo: arrumar esses setters
-                    pessoa.setNome(nome);
-                    pessoa.setEmail(email);
+                    pessoa.update(nome, email);
                     System.out.println("=> Cadastro alterado com sucesso! <= \n");
                     break;
                 }
@@ -243,9 +240,7 @@ public class Main {
                     String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
                     String descricao = capitalizar(Entrada.leiaString("Nova descrição -> "));
 
-                    // todo: arrumar esses setters
-                    categoria.setNome(nome);
-                    categoria.setDescricao(descricao);
+                    categoria.update(nome, descricao);
                     System.out.println("=> Cadastro alterado com sucesso! <= \n");
                     break;
                 }
@@ -357,11 +352,7 @@ public class Main {
                         if (!categoria.validarVisibilidade()) break;
 
 
-                        // todo: arrumar esses setters
-                        objeto.setNome(nome);
-                        objeto.setSituacao(situacao);
-                        objeto.setDono(dono);
-                        objeto.setCategoria(categoria);
+                        objeto.update(nome, situacao, dono, categoria);
                         System.out.println("=> Cadastro alterado com sucesso! <= \n");
                     } catch (Exception e) {
                         System.out.println("=> Código do dono ou da categoria não válido. Tente novamente. <=\n");
@@ -460,10 +451,7 @@ public class Main {
                         String dataSaidaStr = validarTexto(Entrada.leiaString("Nova data de saída da manutenção (DD/MM/AAAA) -> "));
                         LocalDate dataSaida = LocalDate.parse(dataSaidaStr, DATA_FORMATO);
 
-                        // todo: arrumar esses setters
-                        manutencao.setNomeResponsavelManut(responsavelManut);
-                        manutencao.setDataEntrada(dataEntrada);
-                        manutencao.setDataSaida(dataSaida);
+                        manutencao.update(responsavelManut, dataEntrada, dataSaida);
                         System.out.println("=> Cadastro alterado com sucesso! <=\n");
                     } catch (Exception e) {
                         System.out.println("=> Data inválida! Use o formato DD/MM/AAAA. <=\n");
@@ -562,9 +550,7 @@ public class Main {
                         String dataDevolucaoStr = validarTexto(Entrada.leiaString("Nova data da devolução -> "));
                         LocalDate dataDevolucao = LocalDate.parse(dataDevolucaoStr, DATA_FORMATO);
 
-                        // todo: arrumar esses setters
-                        emprestimo.setDataEmprestimo(dataEmprestimo);
-                        emprestimo.setDataDevolucao(dataDevolucao);
+                        emprestimo.update(dataEmprestimo, dataDevolucao);
                         System.out.println("=> Cadastro alterado com sucesso! <=\n");
                     } catch (Exception e) {
                         System.out.println("=> Data inválida! Use o formato DD/MM/AAAA. <=\n");

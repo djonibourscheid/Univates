@@ -31,15 +31,12 @@ public class Emprestimo extends EntidadeVisivel {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(LocalDate dataEmprestimo) {
-        this.dataEmprestimo = dataEmprestimo;
-    }
-
     public LocalDate getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public void setDataDevolucao(LocalDate dataDevolucao) {
+    public void update(LocalDate dataEmprestimo, LocalDate dataDevolucao) {
+        this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
     }
 

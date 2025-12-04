@@ -17,11 +17,8 @@ public class Categoria extends EntidadeVisivel {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void update(String nome, String descricao) {
         this.nome = nome;
-    }
-
-    public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 

@@ -21,29 +21,25 @@ public class Objeto extends EntidadeVisivel {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
-    }
-
     public Pessoa getDono() {
         return dono;
     }
 
-    public void setDono(Pessoa dono) {
-        this.dono = dono;
+    protected void setSituacao(String situacao) {
+        this.situacao = situacao;
     }
 
-    public void setCategoria(Categoria categoria) {
+    public void update(String nome, String situacao, Pessoa dono, Categoria categoria) {
+        this.nome = nome;
+        this.situacao = situacao;
+        this.dono = dono;
         this.categoria = categoria;
     }
 
     @Override
     public String toString() {
-        if (isVisivel()) return "%3d | %s | %s | %s | %s%n".formatted(ID, nome, situacao, dono.getNome(), categoria.getNome());
+        if (isVisivel())
+            return "%3d | %s | %s | %s | %s%n".formatted(ID, nome, situacao, dono.getNome(), categoria.getNome());
         return "";
     }
 

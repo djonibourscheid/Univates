@@ -19,21 +19,15 @@ public class Manutencao extends EntidadeVisivel {
         this.dataSaida = dataSaida;
     }
 
-    public void setNomeResponsavelManut(String nomeResponsavelManut) {
+    public void update(String nomeResponsavelManut, LocalDate dataEntrada, LocalDate dataSaida) {
         this.nomeResponsavelManut = nomeResponsavelManut;
-    }
-
-    public void setDataEntrada(LocalDate dataEntrada) {
         this.dataEntrada = dataEntrada;
-    }
-
-    public void setDataSaida(LocalDate dataSaida) {
         this.dataSaida = dataSaida;
     }
 
     @Override
-    public void excluir(){
-       throw new IllegalArgumentException("=> É necessario informar o código da manutenção. <=\n");
+    public void excluir() {
+        throw new IllegalArgumentException("=> É necessario informar o código da manutenção. <=\n");
     }
 
     public void excluir(char manutConcluido) {
