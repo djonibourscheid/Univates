@@ -1,11 +1,12 @@
 package entidades;
 
-public class Pessoa {
+import model.EntidadeVisivel;
+
+public class Pessoa extends EntidadeVisivel {
     private static int qtdContas = 0;
     private final int ID = ++qtdContas;
     private String nome;
     private String email;
-    private boolean visivel = true;
 
     public Pessoa(String nome, String email) {
         this.nome = nome;
@@ -24,13 +25,9 @@ public class Pessoa {
         this.email = email;
     }
 
-    public void excluir() {
-        this.visivel = false;
-    }
-
     @Override
     public String toString() {
-        if (visivel) return "%3d | %s | %s%n".formatted(ID, nome, email);
+        if (isVisivel()) return "%3d | %s | %s%n".formatted(ID, nome, email);
         return "";
     }
 }

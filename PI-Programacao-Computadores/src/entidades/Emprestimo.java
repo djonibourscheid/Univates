@@ -1,15 +1,16 @@
 package entidades;
 
+import model.EntidadeVisivel;
+
 import java.time.LocalDate;
 
-public class Emprestimo {
+public class Emprestimo extends EntidadeVisivel {
     private static int qtdEmprestimos = 0;
     private final int ID = ++qtdEmprestimos;
     private Objeto objeto;
     private Pessoa tomador;
     private LocalDate dataEmprestimo;
     private LocalDate dataDevolucao;
-    private boolean visivel = true;
 
     public Emprestimo(Objeto objeto, Pessoa tomador, LocalDate dataEmprestimo, LocalDate dataDevolucao) {
         this.objeto = objeto;
@@ -42,16 +43,10 @@ public class Emprestimo {
         this.dataDevolucao = dataDevolucao;
     }
 
-    public void excluir() {
-        this.visivel = false;
-    }
-
     @Override
     public String toString() {
-        if (visivel)
-            return "%3d | %s | %s | %s | %s | %s%n".formatted(ID, objeto.getNome(), objeto.getDono().getNome(),
-                    tomador.getNome()
-                    , dataEmprestimo, dataDevolucao);
+        if (isVisivel())
+            return "%3d | %s | %s | %s | %s | %s%n".formatted(ID, objeto.getNome(), objeto.getDono().getNome(), tomador.getNome(), dataEmprestimo, dataDevolucao);
         return "";
     }
 }

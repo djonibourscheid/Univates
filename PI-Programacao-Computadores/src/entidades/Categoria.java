@@ -1,11 +1,12 @@
 package entidades;
 
-public class Categoria {
+import model.EntidadeVisivel;
+
+public class Categoria extends EntidadeVisivel {
     private static int qtdCategorias = 0;
     private final int ID = ++qtdCategorias;
     private String nome;
     private String descricao;
-    private boolean visivel = true;
 
     public Categoria(String nome, String descricao) {
         this.nome = nome;
@@ -24,13 +25,9 @@ public class Categoria {
         this.descricao = descricao;
     }
 
-    public void excluir() {
-        this.visivel = false;
-    }
-
     @Override
     public String toString() {
-        if (visivel) return "%3d | %s | %s%n".formatted(ID, nome, descricao);
+        if (isVisivel()) return "%3d | %s | %s%n".formatted(ID, nome, descricao);
         return "";
     }
 }

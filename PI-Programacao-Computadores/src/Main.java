@@ -21,8 +21,9 @@ public class Main {
     }
 
     private static void completarDados() {
+        Pessoa pessoa = new Pessoa("nome1", "email1");
         listaPessoas.addAll(List.of(
-                new Pessoa("nome1", "email1"),
+                pessoa,
                 new Pessoa("nome2", "email2"),
                 new Pessoa("nome3", "email3"),
                 new Pessoa("nome4", "email4"),
@@ -39,21 +40,25 @@ public class Main {
 
         Objeto objeto1 = new Objeto("objeto1", "ativo", listaPessoas.get(2), listaCategorias.get(3));
         Objeto objeto2 = new Objeto("objeto2", "baixado", listaPessoas.get(1), listaCategorias.get(1));
+        Objeto objeto3 = new Objeto("objeto3", "ativo", listaPessoas.get(3), listaCategorias.get(2));
 
         listaObjetos.addAll(List.of(
-                objeto1, objeto2,
-                new Objeto("objeto3", "ativo", listaPessoas.get(3), listaCategorias.get(2)),
+                objeto1, objeto2, objeto3,
                 new Objeto("objeto4", "baixado", listaPessoas.get(2), listaCategorias.get(0)),
                 new Objeto("objeto5", "ativo", listaPessoas.get(0), listaCategorias.get(4))
         ));
 
 
+        LocalDate data1 = LocalDate.parse("01/01/2001", DATA_FORMATO);
+        LocalDate data2 = LocalDate.parse("02/01/2001", DATA_FORMATO);
+
         listaManutencoes.addAll(List.of(
-                new Manutencao(objeto1, "José", LocalDate.parse("01/01/2001", DATA_FORMATO), LocalDate.parse("02/01/2001",
-                        DATA_FORMATO)),
-                new Manutencao(objeto2, "Marcos", LocalDate.parse("05/12/2012", DATA_FORMATO), LocalDate.parse("20/12/2012",
-                        DATA_FORMATO))
+                new Manutencao(objeto1, "José", data1, data2),
+                new Manutencao(objeto2, "Marcos", data1, data2)
         ));
+
+
+        listaEmprestimos.add(new Emprestimo(objeto3, pessoa, data1, data2));
     }
 
     private static String validarTexto(String texto) {
@@ -156,11 +161,14 @@ public class Main {
                     listarPessoas();
                     int idPessoa = Entrada.leiaInt("Código da pessoa que deseja alterar -> ");
                     Pessoa pessoa = listaPessoas.get(idPessoa - 1);
-                    // TODO: validar se o idPessoa está visível
+
+                    // valida se a pessoa está visível
+                    if (!pessoa.validarVisibilidade()) break;
 
                     String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
                     String email = validarTexto(Entrada.leiaString("Novo e-mail -> "));
 
+                    // todo: arrumar esses setters
                     pessoa.setNome(nome);
                     pessoa.setEmail(email);
                     System.out.println("=> Cadastro alterado com sucesso! <= \n");
@@ -228,11 +236,14 @@ public class Main {
                     listarCategorias();
                     int idCategoria = Entrada.leiaInt("Código da categoria que deseja alterar -> ");
                     Categoria categoria = listaCategorias.get(idCategoria - 1);
-                    // TODO: validar se o idCategoria está visível
+
+                    // valida se a categoria está visível
+                    if (!categoria.validarVisibilidade()) break;
 
                     String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
                     String descricao = capitalizar(Entrada.leiaString("Nova descrição -> "));
 
+                    // todo: arrumar esses setters
                     categoria.setNome(nome);
                     categoria.setDescricao(descricao);
                     System.out.println("=> Cadastro alterado com sucesso! <= \n");
@@ -287,20 +298,29 @@ public class Main {
                     String situacao = capitalizar(Entrada.leiaString("Situação do objeto (Ativo ou Baixado) -> "));
 
                     // TODO: Este trecho de codigo está repetido no case 3
-                    System.out.println("\nLista de pessoas cadastradas: ");
-                    listarPessoas();
-                    int idDono = Entrada.leiaInt("Código do dono -> ");
-                    Pessoa dono = listaPessoas.get(idDono - 1);
+                    try {
+                        System.out.println("\nLista de pessoas cadastradas: ");
+                        listarPessoas();
+                        int idDono = Entrada.leiaInt("Código do dono -> ");
 
-                    System.out.println("\nLista de categorias cadastradas:");
-                    listarCategorias();
-                    int idCategoria = Entrada.leiaInt("Código da categoria do objeto -> ");
-                    Categoria categoria = listaCategorias.get(idCategoria - 1);
+                        Pessoa dono = listaPessoas.get(idDono - 1);
+                        if (!dono.validarVisibilidade()) break;
 
-                    // TODO: validação se realmente é válido as entradas em vez de dar erro
 
-                    listaObjetos.add(new Objeto(nome, situacao, dono, categoria));
-                    System.out.println("=> Objeto cadastrado com sucesso! <= \n");
+                        System.out.println("\nLista de categorias cadastradas:");
+                        listarCategorias();
+                        int idCategoria = Entrada.leiaInt("Código da categoria do objeto -> ");
+
+                        Categoria categoria = listaCategorias.get(idCategoria - 1);
+                        if (!categoria.validarVisibilidade()) break;
+
+
+                        listaObjetos.add(new Objeto(nome, situacao, dono, categoria));
+                        System.out.println("=> Objeto cadastrado com sucesso! <= \n");
+                    } catch (Exception e) {
+                        System.out.println("=> Código do dono ou da categoria não válido. Tente novamente. <=\n");
+                    }
+
                     break;
                 }
                 case 2: {
@@ -313,28 +333,40 @@ public class Main {
                     listarObjetos();
                     int idObjeto = Entrada.leiaInt("Código do objeto que deseja alterar -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
-                    // TODO: validar se o idObjeto está visível
+
+                    // valida se o objeto está visível
+                    if (!objeto.validarVisibilidade()) break;
 
                     String nome = capitalizar(Entrada.leiaString("Novo nome -> "));
-                    String sitaucao = capitalizar(Entrada.leiaString("Nova situação (Ativo ou Baixado) -> "));
+                    String situacao = capitalizar(Entrada.leiaString("Nova situação (Ativo ou Baixado) -> "));
 
-                    System.out.println("\nLista de pessoas cadastradas: ");
-                    listarPessoas();
-                    int idDono = Entrada.leiaInt("Código do novo dono -> ");
-                    Pessoa dono = listaPessoas.get(idDono - 1);
+                    try {
+                        System.out.println("\nLista de pessoas cadastradas: ");
+                        listarPessoas();
+                        int idDono = Entrada.leiaInt("Código do dono -> ");
 
-                    System.out.println("\nLista de categorias cadastradas:");
-                    listarCategorias();
-                    int idCategoria = Entrada.leiaInt("Código da nova categoria do objeto -> ");
-                    Categoria categoria = listaCategorias.get(idCategoria - 1);
+                        Pessoa dono = listaPessoas.get(idDono - 1);
+                        if (!dono.validarVisibilidade()) break;
 
-                    // TODO: validação se realmente é válido as entradas em vez de dar erro
 
-                    objeto.setNome(nome);
-                    objeto.setSituacao(sitaucao);
-                    objeto.setDono(dono);
-                    objeto.setCategoria(categoria);
-                    System.out.println("=> Cadastro alterado com sucesso! <= \n");
+                        System.out.println("\nLista de categorias cadastradas:");
+                        listarCategorias();
+                        int idCategoria = Entrada.leiaInt("Código da categoria do objeto -> ");
+
+                        Categoria categoria = listaCategorias.get(idCategoria - 1);
+                        if (!categoria.validarVisibilidade()) break;
+
+
+                        // todo: arrumar esses setters
+                        objeto.setNome(nome);
+                        objeto.setSituacao(situacao);
+                        objeto.setDono(dono);
+                        objeto.setCategoria(categoria);
+                        System.out.println("=> Cadastro alterado com sucesso! <= \n");
+                    } catch (Exception e) {
+                        System.out.println("=> Código do dono ou da categoria não válido. Tente novamente. <=\n");
+                    }
+
                     break;
                 }
                 case 4: {
@@ -386,15 +418,18 @@ public class Main {
                     listarObjetos();
                     int idObjeto = Entrada.leiaInt("ID do objeto -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
+                    if (!objeto.validarVisibilidade()) break;
 
                     // TODO: codigo repetido no case 3
                     String responsavelManut = capitalizar(Entrada.leiaString("Nome do responsável pela manutenção -> "));
-                    String dataEntradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
-                    String dataSaidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
 
                     try {
+                        String dataEntradaStr = validarTexto(Entrada.leiaString("Data de entrada na manutenção (DD/MM/AAAA) -> "));
                         LocalDate dataEntrada = LocalDate.parse(dataEntradaStr, DATA_FORMATO);
+
+                        String dataSaidaStr = validarTexto(Entrada.leiaString("Data de saída da manutenção (DD/MM/AAAA) -> "));
                         LocalDate dataSaida = LocalDate.parse(dataSaidaStr, DATA_FORMATO);
+
                         listaManutencoes.add(new Manutencao(objeto, responsavelManut, dataEntrada, dataSaida));
                         System.out.println("=> Manutenção cadastrada com sucesso! <=\n");
                     } catch (Exception e) {
@@ -412,16 +447,20 @@ public class Main {
                     listarManutencoes();
                     int idManut = Entrada.leiaInt("Código da manutenção que deseja alterar -> ");
                     Manutencao manutencao = listaManutencoes.get(idManut - 1);
-                    // TODO: validar se o idManut está visível
+
+                    // valida se a manutencao está visível
+                    if (!manutencao.validarVisibilidade()) break;
 
                     String responsavelManut = capitalizar(Entrada.leiaString("Nome do novo responsável pela manutenção -> "));
-                    String dataEntradaStr = validarTexto(Entrada.leiaString("Nova data de entrada na manutenção (DD/MM/AAAA) -> "));
-                    String dataSaidaStr = validarTexto(Entrada.leiaString("Nova data de saída da manutenção (DD/MM/AAAA) -> "));
 
                     try {
+                        String dataEntradaStr = validarTexto(Entrada.leiaString("Nova data de entrada na manutenção (DD/MM/AAAA) -> "));
                         LocalDate dataEntrada = LocalDate.parse(dataEntradaStr, DATA_FORMATO);
+
+                        String dataSaidaStr = validarTexto(Entrada.leiaString("Nova data de saída da manutenção (DD/MM/AAAA) -> "));
                         LocalDate dataSaida = LocalDate.parse(dataSaidaStr, DATA_FORMATO);
 
+                        // todo: arrumar esses setters
                         manutencao.setNomeResponsavelManut(responsavelManut);
                         manutencao.setDataEntrada(dataEntrada);
                         manutencao.setDataSaida(dataSaida);
@@ -480,16 +519,19 @@ public class Main {
                     listarObjetos();
                     int idObjeto = Entrada.leiaInt("ID do objeto -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
+                    if (!objeto.validarVisibilidade()) break;
 
                     listarPessoas();
                     int idTomador = Entrada.leiaInt("\nID do tomador -> ");
                     Pessoa tomador = listaPessoas.get(idTomador - 1);
+                    if (!tomador.validarVisibilidade()) break;
 
-                    String dataEmprestimoStr = validarTexto(Entrada.leiaString("Data do empréstimo -> "));
-                    String dataDevolucaoStr = validarTexto(Entrada.leiaString("Data da devolução -> "));
 
                     try {
+                        String dataEmprestimoStr = validarTexto(Entrada.leiaString("Data do empréstimo -> "));
                         LocalDate dataEmprestimo = LocalDate.parse(dataEmprestimoStr, DATA_FORMATO);
+
+                        String dataDevolucaoStr = validarTexto(Entrada.leiaString("Data da devolução -> "));
                         LocalDate dataDevolucao = LocalDate.parse(dataDevolucaoStr, DATA_FORMATO);
 
                         listaEmprestimos.add(new Emprestimo(objeto, tomador, dataEmprestimo, dataDevolucao));
@@ -509,15 +551,18 @@ public class Main {
                     listarEmprestimos();
                     int idEmprestimo = Entrada.leiaInt("Código do empréstimo que deseja alterar -> ");
                     Emprestimo emprestimo = listaEmprestimos.get(idEmprestimo - 1);
-                    // TODO: validar se o idEmprestimo está visível
 
-                    String dataEmprestimoStr = validarTexto(Entrada.leiaString("Nova data do empréstimo -> "));
-                    String dataDevolucaoStr = validarTexto(Entrada.leiaString("Nova data da devolução -> "));
+                    // valida se o emprestimo está visível
+                    if (!emprestimo.validarVisibilidade()) break;
 
                     try {
+                        String dataEmprestimoStr = validarTexto(Entrada.leiaString("Nova data do empréstimo -> "));
                         LocalDate dataEmprestimo = LocalDate.parse(dataEmprestimoStr, DATA_FORMATO);
+
+                        String dataDevolucaoStr = validarTexto(Entrada.leiaString("Nova data da devolução -> "));
                         LocalDate dataDevolucao = LocalDate.parse(dataDevolucaoStr, DATA_FORMATO);
 
+                        // todo: arrumar esses setters
                         emprestimo.setDataEmprestimo(dataEmprestimo);
                         emprestimo.setDataDevolucao(dataDevolucao);
                         System.out.println("=> Cadastro alterado com sucesso! <=\n");
