@@ -151,13 +151,13 @@ public class Main {
                     break;
                 }
                 case 2: {
-                    System.out.println("Lista de pessoas cadastradas:");
                     listarPessoas();
-                    System.out.println("----------------------\n");
                     break;
                 }
                 case 3: {
-                    listarPessoas();
+                    int qtdPessoas = listarPessoas();
+                    if (qtdPessoas == 0) break;
+
                     int idPessoa = Entrada.leiaInt("Código da pessoa que deseja alterar -> ");
                     Pessoa pessoa = listaPessoas.get(idPessoa - 1);
 
@@ -172,7 +172,9 @@ public class Main {
                     break;
                 }
                 case 4: {
-                    listarPessoas();
+                    int qtdPessoas = listarPessoas();
+                    if (qtdPessoas == 0) break;
+
                     int idPessoa = Entrada.leiaInt("Código da pessoa que deseja excluir -> ");
                     listaPessoas.get(idPessoa - 1).excluir();
                     System.out.println("=> Cadastro excluído com sucesso! <= \n");
@@ -189,11 +191,23 @@ public class Main {
         } while (opcao != 0);
     }
 
-    private static void listarPessoas() {
+    private static int listarPessoas() {
+        int tempCount = 0;
+
+        System.out.println("Lista de pessoas cadastradas:");
         System.out.println("Código | Nome | E-mail");
+
         for (Pessoa pessoa : listaPessoas) {
-            System.out.print(pessoa);
+            if (pessoa.isVisivel()) {
+                System.out.print(pessoa);
+                tempCount++;
+            }
         }
+
+        if (tempCount == 0) System.out.println("Não há pessoas cadastradas.");
+
+        System.out.println("----------------------\n");
+        return tempCount;
     }
 
 
@@ -224,13 +238,13 @@ public class Main {
                     break;
                 }
                 case 2: {
-                    System.out.println("Lista de categorias cadastradas:");
                     listarCategorias();
-                    System.out.println("----------------------\n");
                     break;
                 }
                 case 3: {
-                    listarCategorias();
+                    int qtdCategorias = listarCategorias();
+                    if (qtdCategorias == 0) break;
+
                     int idCategoria = Entrada.leiaInt("Código da categoria que deseja alterar -> ");
                     Categoria categoria = listaCategorias.get(idCategoria - 1);
 
@@ -245,7 +259,9 @@ public class Main {
                     break;
                 }
                 case 4: {
-                    listarCategorias();
+                    int qtdCategorias = listarCategorias();
+                    if (qtdCategorias == 0) break;
+
                     int idCategoria = Entrada.leiaInt("Código da categoria que deseja excluir -> ");
                     listaCategorias.get(idCategoria - 1).excluir();
                     System.out.println("=> Cadastro excluído com sucesso! <= \n");
@@ -262,13 +278,24 @@ public class Main {
         } while (opcao != 0);
     }
 
-    private static void listarCategorias() {
-        System.out.println("Código | Nome | Descrição");
-        for (Categoria categoria : listaCategorias) {
-            System.out.print(categoria);
-        }
-    }
+    private static int listarCategorias() {
+        int tempCount = 0;
 
+        System.out.println("Lista de categorias cadastradas:");
+        System.out.println("Código | Nome | Descrição");
+
+        for (Categoria categoria : listaCategorias) {
+            if (categoria.isVisivel()) {
+                System.out.print(categoria);
+                tempCount++;
+            }
+        }
+
+        if (tempCount == 0) System.out.println("Não há categorias cadastradas.");
+
+        System.out.println("----------------------\n");
+        return tempCount;
+    }
 
     //  submenu objetos
     private static void objetos() {
@@ -294,18 +321,18 @@ public class Main {
 
                     // TODO: Este trecho de codigo está repetido no case 3
                     try {
-                        System.out.println("\nLista de pessoas cadastradas: ");
-                        listarPessoas();
+                        System.out.println();
+                        int qtdPessoas = listarPessoas();
+                        if (qtdPessoas == 0) break;
                         int idDono = Entrada.leiaInt("Código do dono -> ");
-
                         Pessoa dono = listaPessoas.get(idDono - 1);
                         if (!dono.validarVisibilidade()) break;
 
 
-                        System.out.println("\nLista de categorias cadastradas:");
-                        listarCategorias();
+                        System.out.println();
+                        int qtdCategorias = listarCategorias();
+                        if (qtdCategorias == 0) break;
                         int idCategoria = Entrada.leiaInt("Código da categoria do objeto -> ");
-
                         Categoria categoria = listaCategorias.get(idCategoria - 1);
                         if (!categoria.validarVisibilidade()) break;
 
@@ -319,13 +346,13 @@ public class Main {
                     break;
                 }
                 case 2: {
-                    System.out.println("Lista de objetos cadastrados:");
                     listarObjetos();
-                    System.out.println("----------------------\n");
                     break;
                 }
                 case 3: {
-                    listarObjetos();
+                    int qtdObjetos = listarObjetos();
+                    if (qtdObjetos == 0) break;
+
                     int idObjeto = Entrada.leiaInt("Código do objeto que deseja alterar -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
 
@@ -336,10 +363,11 @@ public class Main {
                     String situacao = capitalizar(Entrada.leiaString("Nova situação (Ativo ou Baixado) -> "));
 
                     try {
-                        System.out.println("\nLista de pessoas cadastradas: ");
-                        listarPessoas();
-                        int idDono = Entrada.leiaInt("Código do dono -> ");
+                        System.out.println();
+                        int qtdPessoas = listarPessoas();
+                        if (qtdPessoas == 0) break;
 
+                        int idDono = Entrada.leiaInt("Código do dono -> ");
                         Pessoa dono = listaPessoas.get(idDono - 1);
                         if (!dono.validarVisibilidade()) break;
 
@@ -361,7 +389,9 @@ public class Main {
                     break;
                 }
                 case 4: {
-                    listarObjetos();
+                    int qtdObjetos = listarObjetos();
+                    if (qtdObjetos == 0) break;
+
                     int idObjeto = Entrada.leiaInt("Código do objeto que deseja excluir -> ");
                     listaObjetos.get(idObjeto - 1).excluir();
                     System.out.println("=> Cadastro excluído com sucesso! <= \n");
@@ -378,13 +408,24 @@ public class Main {
         } while (opcao != 0);
     }
 
-    private static void listarObjetos() {
-        System.out.println("Código | Nome | Situação | Nome dono | Nome categoria");
-        for (Objeto objeto : listaObjetos) {
-            System.out.print(objeto);
-        }
-    }
+    private static int listarObjetos() {
+        int tempCount = 0;
 
+        System.out.println("Lista de objetos cadastrados:");
+        System.out.println("Código | Nome | Situação | Nome dono | Nome categoria");
+
+        for (Objeto objeto : listaObjetos) {
+            if (objeto.isVisivel()) {
+                System.out.print(objeto);
+                tempCount++;
+            }
+        }
+
+        if (tempCount == 0) System.out.println("Não há objetos cadastrados.");
+
+        System.out.println("----------------------\n");
+        return tempCount;
+    }
 
     //  submenu manutencoes
     private static void manutencoes() {
@@ -408,15 +449,15 @@ public class Main {
 
                     System.out.println("Lista de objetos:");
                     System.out.println("Código | Nome | Situação | Nome dono | Nome categoria");
-                    int qtdObjetosBaixado = 0;
+                    int tempCount = 0;
                     for (Objeto objeto : listaObjetos) {
                         if (objeto.getSituacao().equals("Baixado") && objeto.isVisivel()) {
                             System.out.print(objeto);
-                            qtdObjetosBaixado++;
+                            tempCount++;
                         }
                     }
-                    if (qtdObjetosBaixado == 0) {
-                        System.out.println("Não há elementos baixados.");
+                    if (tempCount == 0) {
+                        System.out.println("Não há objetos baixados para manutenções.");
                         System.out.println("----------------------\n");
                         break;
                     }
@@ -443,13 +484,13 @@ public class Main {
                     break;
                 }
                 case 2: {
-                    System.out.println("Lista de manutenções cadastradas:");
                     listarManutencoes();
-                    System.out.println("----------------------\n");
                     break;
                 }
                 case 3: {
-                    listarManutencoes();
+                    int qtdManut = listarManutencoes();
+                    if (qtdManut == 0) break;
+
                     int idManut = Entrada.leiaInt("Código da manutenção que deseja alterar -> ");
                     Manutencao manutencao = listaManutencoes.get(idManut - 1);
 
@@ -473,7 +514,9 @@ public class Main {
                     break;
                 }
                 case 4: {
-                    listarManutencoes();
+                    int qtdManut = listarManutencoes();
+                    if (qtdManut == 0) break;
+
                     int idManut = Entrada.leiaInt("Código da manutenção que deseja excluir -> ");
                     listaManutencoes.get(idManut - 1).excluir();
                     System.out.println("=> Cadastro excluído com sucesso e objeto voltou ao status de 'Ativo'! <= \n");
@@ -490,13 +533,24 @@ public class Main {
         } while (opcao != 0);
     }
 
-    private static void listarManutencoes() {
-        System.out.println("Código | Nome objeto | Nome do dono | Responsável pela manut. | Data entrada | Data saída");
-        for (Manutencao manutencao : listaManutencoes) {
-            System.out.print(manutencao);
-        }
-    }
+    private static int listarManutencoes() {
+        int tempCount = 0;
 
+        System.out.println("Lista de manutenções cadastradas:");
+        System.out.println("Código | Nome objeto | Nome do dono | Responsável pela manut. | Data entrada | Data saída");
+
+        for (Manutencao manutencao : listaManutencoes) {
+            if (manutencao.isVisivel()) {
+                System.out.print(manutencao);
+                tempCount++;
+            }
+        }
+
+        if (tempCount == 0) System.out.println("Não há manutenções cadastradas.");
+
+        System.out.println("----------------------\n");
+        return tempCount;
+    }
 
     private static void emprestimos() {
         int opcao;
@@ -517,12 +571,21 @@ public class Main {
                 case 1: {
                     System.out.println("Cadastro:");
 
-                    listarObjetos();
                     System.out.println("Lista de objetos:");
                     System.out.println("Código | Nome | Situação | Nome dono | Nome categoria");
+                    int tempCount = 0;
                     for (Objeto objeto : listaObjetos) {
-                        if (objeto.getSituacao().equals("Ativo")) System.out.print(objeto);
+                        if (objeto.getSituacao().equals("Ativo") && objeto.isVisivel()) {
+                            System.out.print(objeto);
+                            tempCount++;
+                        }
                     }
+                    if (tempCount == 0) {
+                        System.out.println("Não há objetos disponíveis para empréstimos.");
+                        System.out.println("----------------------\n");
+                        break;
+                    }
+
                     int idObjeto = Entrada.leiaInt("ID do objeto -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
 
@@ -535,9 +598,19 @@ public class Main {
 
                     System.out.println("Lista de pessoas:");
                     System.out.println("Código | Nome | E-mail");
+                    tempCount = 0;
                     for (Pessoa pessoa : listaPessoas) {
-                        if (!pessoa.equals(objeto.getDono())) System.out.print(pessoa);
+                        if (!pessoa.equals(objeto.getDono())) {
+                            System.out.print(pessoa);
+                            tempCount++;
+                        }
                     }
+                    if (tempCount == 0) {
+                        System.out.println("Não há pessoas disponíveis para emprestar o objeto.");
+                        System.out.println("----------------------\n");
+                        break;
+                    }
+
                     int idTomador = Entrada.leiaInt("\nID do tomador -> ");
                     Pessoa tomador = listaPessoas.get(idTomador - 1);
 
@@ -563,13 +636,13 @@ public class Main {
                     break;
                 }
                 case 2: {
-                    System.out.println("Lista de empréstimos cadastrados:");
                     listarEmprestimos();
-                    System.out.println("----------------------\n");
                     break;
                 }
                 case 3: {
-                    listarEmprestimos();
+                    int qtdEmprestimos = listarEmprestimos();
+                    if (qtdEmprestimos == 0) break;
+
                     int idEmprestimo = Entrada.leiaInt("Código do empréstimo que deseja alterar -> ");
                     Emprestimo emprestimo = listaEmprestimos.get(idEmprestimo - 1);
 
@@ -591,8 +664,10 @@ public class Main {
                     break;
                 }
                 case 4: {
-                    listarEmprestimos();
-                    int idEmprestimo = Entrada.leiaInt("Código da empréstimo que deseja excluir -> ");
+                    int qtdEmprestimos = listarEmprestimos();
+                    if (qtdEmprestimos == 0) break;
+
+                    int idEmprestimo = Entrada.leiaInt("Código do empréstimo que deseja excluir -> ");
                     listaEmprestimos.get(idEmprestimo - 1).excluir();
                     System.out.println("=> Cadastro excluído com sucesso e objeto devolvido ao status de 'Ativo'! <= \n");
                     break;
@@ -608,10 +683,23 @@ public class Main {
         } while (opcao != 0);
     }
 
-    private static void listarEmprestimos() {
+    private static int listarEmprestimos() {
+        int tempCount = 0;
+
+        System.out.println("Lista de empréstimos cadastradas:");
         System.out.println("Código | Nome objeto | Nome do Dono | Nome do tomador | Data entrada | Data saída");
+
+
         for (Emprestimo emprestimo : listaEmprestimos) {
-            System.out.print(emprestimo);
+            if (emprestimo.isVisivel()) {
+                System.out.print(emprestimo);
+                tempCount++;
+            }
         }
+
+        if (tempCount == 0) System.out.println("Não há empréstimos cadastradas.");
+
+        System.out.println("----------------------\n");
+        return tempCount;
     }
 }
