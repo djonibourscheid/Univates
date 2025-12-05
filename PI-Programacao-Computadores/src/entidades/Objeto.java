@@ -6,7 +6,7 @@ public class Objeto extends EntidadeVisivel {
     private static int qtdObjetos = 0;
     private final int ID = ++qtdObjetos;
     private String nome;
-    private String situacao;
+    private String situacao;  // Ativo, Emprestado, Manutenção ou Baixado
     private Pessoa dono;
     private Categoria categoria;
 
@@ -23,6 +23,10 @@ public class Objeto extends EntidadeVisivel {
 
     public Pessoa getDono() {
         return dono;
+    }
+
+    public String getSituacao() {
+        return situacao;
     }
 
     protected void setSituacao(String situacao) {

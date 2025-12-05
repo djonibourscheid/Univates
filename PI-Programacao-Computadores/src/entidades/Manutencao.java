@@ -13,6 +13,8 @@ public class Manutencao extends EntidadeVisivel {
     private LocalDate dataSaida;
 
     public Manutencao(Objeto objeto, String nomeResponsavelManut, LocalDate dataEntrada, LocalDate dataSaida) {
+        objeto.setSituacao("Manutenção");
+
         this.objeto = objeto;
         this.nomeResponsavelManut = nomeResponsavelManut;
         this.dataEntrada = dataEntrada;
@@ -27,16 +29,8 @@ public class Manutencao extends EntidadeVisivel {
 
     @Override
     public void excluir() {
-        throw new IllegalArgumentException("=> É necessario informar o código da manutenção. <=\n");
-    }
-
-    public void excluir(char manutConcluido) {
         super.excluir();
-        if (manutConcluido == 's') {
-            objeto.setSituacao("Ativo");
-        } else {
-            objeto.setSituacao("Baixado");
-        }
+        objeto.setSituacao("Ativo");
     }
 
     @Override

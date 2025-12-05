@@ -37,14 +37,14 @@ public class Main {
                 new Categoria("categoria5", "descricao5")
         ));
 
-        Objeto objeto1 = new Objeto("objeto1", "ativo", listaPessoas.get(2), listaCategorias.get(3));
-        Objeto objeto2 = new Objeto("objeto2", "baixado", listaPessoas.get(1), listaCategorias.get(1));
-        Objeto objeto3 = new Objeto("objeto3", "ativo", listaPessoas.get(3), listaCategorias.get(2));
+        Objeto objeto1 = new Objeto("objeto1", "Ativo", listaPessoas.get(2), listaCategorias.get(3));
+        Objeto objeto2 = new Objeto("objeto2", "Baixado", listaPessoas.get(1), listaCategorias.get(1));
+        Objeto objeto3 = new Objeto("objeto3", "Ativo", listaPessoas.get(3), listaCategorias.get(2));
 
         listaObjetos.addAll(List.of(
                 objeto1, objeto2, objeto3,
-                new Objeto("objeto4", "baixado", listaPessoas.get(2), listaCategorias.get(0)),
-                new Objeto("objeto5", "ativo", listaPessoas.get(0), listaCategorias.get(4))
+                new Objeto("objeto4", "Baixado", listaPessoas.get(2), listaCategorias.get(0)),
+                new Objeto("objeto5", "Ativo", listaPessoas.get(0), listaCategorias.get(4))
         ));
 
 
@@ -406,7 +406,21 @@ public class Main {
                 case 1: {
                     System.out.println("Cadastro:");
 
-                    listarObjetos();
+                    System.out.println("Lista de objetos:");
+                    System.out.println("Código | Nome | Situação | Nome dono | Nome categoria");
+                    int qtdObjetosBaixado = 0;
+                    for (Objeto objeto : listaObjetos) {
+                        if (objeto.getSituacao().equals("Baixado") && objeto.isVisivel()) {
+                            System.out.print(objeto);
+                            qtdObjetosBaixado++;
+                        }
+                    }
+                    if (qtdObjetosBaixado == 0) {
+                        System.out.println("Não há elementos baixados.");
+                        System.out.println("----------------------\n");
+                        break;
+                    }
+
                     int idObjeto = Entrada.leiaInt("ID do objeto -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
                     if (!objeto.validarVisibilidade()) break;
@@ -461,9 +475,8 @@ public class Main {
                 case 4: {
                     listarManutencoes();
                     int idManut = Entrada.leiaInt("Código da manutenção que deseja excluir -> ");
-                    char manutConcluido = Entrada.leiaChar("Manutenção concluída? (S/N) ->");
-                    listaManutencoes.get(idManut - 1).excluir(manutConcluido);
-                    System.out.println("=> Cadastro excluído com sucesso! <= \n");
+                    listaManutencoes.get(idManut - 1).excluir();
+                    System.out.println("=> Cadastro excluído com sucesso e objeto voltou ao status de 'Ativo'! <= \n");
                     break;
                 }
                 case 0: {
@@ -505,21 +518,41 @@ public class Main {
                     System.out.println("Cadastro:");
 
                     listarObjetos();
+                    System.out.println("Lista de objetos:");
+                    System.out.println("Código | Nome | Situação | Nome dono | Nome categoria");
+                    for (Objeto objeto : listaObjetos) {
+                        if (objeto.getSituacao().equals("Ativo")) System.out.print(objeto);
+                    }
                     int idObjeto = Entrada.leiaInt("ID do objeto -> ");
                     Objeto objeto = listaObjetos.get(idObjeto - 1);
-                    if (!objeto.validarVisibilidade()) break;
 
-                    listarPessoas();
+                    if (!objeto.validarVisibilidade()) break;
+                    if (!objeto.getSituacao().equals("Ativo")) {
+                        System.out.println("=> Objeto não pode ser emprestado. Tente novamente. <=\n");
+                        break;
+                    }
+
+
+                    System.out.println("Lista de pessoas:");
+                    System.out.println("Código | Nome | E-mail");
+                    for (Pessoa pessoa : listaPessoas) {
+                        if (!pessoa.equals(objeto.getDono())) System.out.print(pessoa);
+                    }
                     int idTomador = Entrada.leiaInt("\nID do tomador -> ");
                     Pessoa tomador = listaPessoas.get(idTomador - 1);
+
                     if (!tomador.validarVisibilidade()) break;
+                    if (tomador.equals(objeto.getDono())) {
+                        System.out.println("=> Não é possível emprestar um objeto para o dono do objeto! <=\n");
+                        break;
+                    }
 
 
                     try {
-                        String dataEmprestimoStr = validarTexto(Entrada.leiaString("Data do empréstimo -> "));
+                        String dataEmprestimoStr = validarTexto(Entrada.leiaString("Data do empréstimo (DD/MM/AAAA) -> "));
                         LocalDate dataEmprestimo = LocalDate.parse(dataEmprestimoStr, DATA_FORMATO);
 
-                        String dataDevolucaoStr = validarTexto(Entrada.leiaString("Data da devolução -> "));
+                        String dataDevolucaoStr = validarTexto(Entrada.leiaString("Data da devolução (DD/MM/AAAA) -> "));
                         LocalDate dataDevolucao = LocalDate.parse(dataDevolucaoStr, DATA_FORMATO);
 
                         listaEmprestimos.add(new Emprestimo(objeto, tomador, dataEmprestimo, dataDevolucao));
@@ -544,10 +577,10 @@ public class Main {
                     if (!emprestimo.validarVisibilidade()) break;
 
                     try {
-                        String dataEmprestimoStr = validarTexto(Entrada.leiaString("Nova data do empréstimo -> "));
+                        String dataEmprestimoStr = validarTexto(Entrada.leiaString("Nova data do empréstimo (DD/MM/AAAA) -> "));
                         LocalDate dataEmprestimo = LocalDate.parse(dataEmprestimoStr, DATA_FORMATO);
 
-                        String dataDevolucaoStr = validarTexto(Entrada.leiaString("Nova data da devolução -> "));
+                        String dataDevolucaoStr = validarTexto(Entrada.leiaString("Nova data da devolução (DD/MM/AAAA) -> "));
                         LocalDate dataDevolucao = LocalDate.parse(dataDevolucaoStr, DATA_FORMATO);
 
                         emprestimo.update(dataEmprestimo, dataDevolucao);
@@ -561,7 +594,7 @@ public class Main {
                     listarEmprestimos();
                     int idEmprestimo = Entrada.leiaInt("Código da empréstimo que deseja excluir -> ");
                     listaEmprestimos.get(idEmprestimo - 1).excluir();
-                    System.out.println("=> Cadastro excluído com sucesso! <= \n");
+                    System.out.println("=> Cadastro excluído com sucesso e objeto devolvido ao status de 'Ativo'! <= \n");
                     break;
                 }
                 case 0: {

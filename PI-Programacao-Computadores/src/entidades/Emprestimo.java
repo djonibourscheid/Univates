@@ -13,6 +13,8 @@ public class Emprestimo extends EntidadeVisivel {
     private LocalDate dataDevolucao;
 
     public Emprestimo(Objeto objeto, Pessoa tomador, LocalDate dataEmprestimo, LocalDate dataDevolucao) {
+        objeto.setSituacao("Emprestado");
+
         this.objeto = objeto;
         this.tomador = tomador;
         this.dataEmprestimo = dataEmprestimo;
@@ -38,6 +40,12 @@ public class Emprestimo extends EntidadeVisivel {
     public void update(LocalDate dataEmprestimo, LocalDate dataDevolucao) {
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
+    }
+
+    @Override
+    public void excluir() {
+        super.excluir();
+        objeto.setSituacao("Ativo");
     }
 
     @Override
